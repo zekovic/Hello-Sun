@@ -390,10 +390,21 @@ func initDrawFunctions() {
 	drawMap = make(map [string]func())
 	
 	drawMap["main"] = func() {
-		stateInt, ok := statesTxtMap[weatherResult.CurrentCondition[0].WeatherCodeTxt]
-		if ok {
+		weather_info := weatherResult.CurrentCondition[0]
+		stateInt := statesTxtMap[weather_info.WeatherCodeTxt]
+		
+		if weatherResult.isNight() {
+			moonInt := moonTxtMap[weather_info.MoonIcon]
+			iup.DrawImage(cv, fmt.Sprintf("moon_%v", moonInt), dlgW - 110, totalY + 15, 70, 70)
+			overMoonInt := getStateOverMoon(stateInt)
+			if overMoonInt != -1 {
+				iup.DrawImage(cv, fmt.Sprintf("state_%v", overMoonInt), dlgW - 95, totalY + 35, 70, 70)
+			}
+		} else {
 			iup.DrawImage(cv, fmt.Sprintf("state_%v", stateInt), dlgW - 110, totalY + 15, 70, 70)
 		}
+		
+		
 		t := getTempByUnit()
 		
 		cityFont := 30

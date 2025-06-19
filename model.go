@@ -45,25 +45,25 @@ func initImagesInfo() {
 	statesArr[17] = ImageData{ "Thundery Heavy Rain",	"img_sun.jpg", 180,	89,	70,	70 }
 	statesArr[18] = ImageData{ "Thundery Snow Showers","img_sun.jpg",269,	90,	70,	70 }
 	
-	statesTxtMap["?"]		= 0
-	statesTxtMap["mm"]	= 3
-	statesTxtMap["="]		= 5
-	statesTxtMap["///"]	= 14
-	statesTxtMap["//"]	= 13
-	statesTxtMap["**"]	= 11
-	statesTxtMap["*/*"]	= 16
-	statesTxtMap["/"]		= 12
-	statesTxtMap["."]		= 6
-	statesTxtMap["x"]		= 8
-	statesTxtMap["x/"]	= 7
-	statesTxtMap["*"]		= 10
-	statesTxtMap["*/"]	= 15
-	statesTxtMap["m"]		= 2
-	statesTxtMap["o"]		= 1
-	statesTxtMap["/!/"]	= 17
-	statesTxtMap["!/"]	= 9
-	statesTxtMap["*!*"]	= 18
-	statesTxtMap["mmm"]	= 4
+	statesTxtMap["?"]		= 0		//  ✨
+	statesTxtMap["mm"]		= 3		//  ☁️
+	statesTxtMap["="]		= 5		//  🌫
+	statesTxtMap["///"]		= 14	//  🌧
+	statesTxtMap["//"]		= 13	//  🌧
+	statesTxtMap["**"]		= 11	//  ❄️
+	statesTxtMap["*/*"]		= 16	//  ❄️
+	statesTxtMap["/"]		= 12	//  🌦
+	statesTxtMap["."]		= 6		//  🌦
+	statesTxtMap["x"]		= 8		//  🌧
+	statesTxtMap["x/"]		= 7		//  🌧
+	statesTxtMap["*"]		= 10	//  🌨
+	statesTxtMap["*/"]		= 15	//  🌨
+	statesTxtMap["m"]		= 2		//  ⛅️
+	statesTxtMap["o"]		= 1		//  ☀️
+	statesTxtMap["/!/"]		= 17	//  🌩
+	statesTxtMap["!/"]		= 9		//  ⛈
+	statesTxtMap["*!*"]		= 18	//  ⛈
+	statesTxtMap["mmm"]		= 4		//  ☁️
 	
 	statesMap[113] = 1		//"Sunny",
 	statesMap[116] = 2		//"PartlyCloudy",

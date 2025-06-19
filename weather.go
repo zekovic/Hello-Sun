@@ -131,16 +131,16 @@ func (wr *WeatherResult) saveLocationToConfig() {
 	//config.save()
 }
 
-
-
-func getCurrentTempC() (string, error) {
-	if len(weatherResult.CurrentCondition) == 0 {
-		return "___", errors.New("Info is empty")
+func (wr *WeatherResult) isNight() bool {
+	if len(wr.CurrentCondition) == 0 {
+		return false
 	}
-	if weatherResult.CurrentCondition[0].Temp_C == "" {
-		return "___", errors.New("Info (Temp. [C]) is empty")
+	tNow := time.Now()
+	tNow24H := tNow.Format("15:04")
+	if tNow24H < wr.CurrentCondition[0].Sunrise || wr.CurrentCondition[0].Sunset < tNow24H {
+		return true
 	}
-	return weatherResult.CurrentCondition[0].Temp_C, nil
+	return false
 }
 
 

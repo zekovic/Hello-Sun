@@ -254,3 +254,26 @@ func getPrecipitationByUnit() string {
 	return result
 }
 
+func getStateOverMoon(weatherState int) int {
+	
+	if weatherState == 3 { return 3 }	//  ☁️
+	if weatherState == 5 { return 3 }	//  ☁️  <=  🌫
+	if weatherState == 14 { return 14 }	//  🌧
+	if weatherState == 13 { return 13 }	//  🌧
+	if weatherState == 11 { return 11 }	//  ❄️
+	if weatherState == 16 { return 16 }	//  ❄️
+	if weatherState == 12 { return 14 }	//  🌧  <=  🌦
+	if weatherState == 6 { return 14 }	//  🌧  <=  🌦
+	if weatherState == 8 { return 8 }	//  🌧
+	if weatherState == 7 { return 7 }	//  🌧
+	if weatherState == 10 { return 10 }	//  🌨
+	if weatherState == 15 { return 15 }	//  🌨
+	if weatherState == 2 { return 3 }	//  ☁️  <=  ⛅️
+	if weatherState == 1 { return -1 }	//  🌘  <=  ☀️
+	if weatherState == 17 { return 17 }	//  🌩
+	if weatherState == 9 { return 9 }	//  ⛈
+	if weatherState == 18 { return 18 }	//  ⛈
+	if weatherState == 4 { return 4 }	//  ☁️
+	
+	return -1
+}
