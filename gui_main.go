@@ -504,7 +504,14 @@ func initDrawFunctions() {
 		weather_info := weatherResult.CurrentCondition[0]
 		cv.SetAttribute("DRAWFONT", config.Font + ", Bold 12")
 		
-		day_period := fmt.Sprintf("        %v          %v", weather_info.Sunrise, weather_info.Sunset)
+		sunrise_str := weather_info.Sunrise
+		sunset_str := weather_info.Sunset
+		if config.Time == "AMPM" {
+			sunrise_str = time24toAMPM(sunrise_str)
+			sunset_str = time24toAMPM(sunset_str)
+		}
+		
+		day_period := fmt.Sprintf("        %v          %v", sunrise_str, sunset_str)
 		myOutlineText(cv, day_period, 20, totalY, -1, -1, 1, "255 255 255", "25 25 25")
 		iup.DrawImage(cv, "sunrise_img", 18, totalY + 5, 28, 10)
 		iup.DrawImage(cv, "wind_4", 35, totalY, 20, 20)

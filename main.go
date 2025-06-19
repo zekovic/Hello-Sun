@@ -211,6 +211,17 @@ func getWindByKmh(wind_kmh string) [6]string {
 	return result
 }
 
+func getTimeBy24H(time24H string) time.Time {
+	t, _ := time.Parse("15:04", time24H)
+	return t
+}
+func getTimeAMPM(t time.Time) string {
+	return t.Format("03:04 PM")
+}
+func time24toAMPM(time24H string) string {
+	return getTimeAMPM(getTimeBy24H(time24H))
+}
+
 func getWindByUnit() (string, string) {
 	result := ""
 	arrow := ""
@@ -242,3 +253,4 @@ func getPrecipitationByUnit() string {
 	if config.Rain == "in" { result = weatherResult.CurrentCondition[0].PrecipInches + " in" }
 	return result
 }
+
