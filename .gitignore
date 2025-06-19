@@ -1,0 +1,6 @@
+*.sublime-project
+*.sublime-workspace
+/_other
+/_other2
+config.json
+*.exe

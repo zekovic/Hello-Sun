@@ -1,0 +1,4 @@
+github.com/gen2brain/iup-go/iup v0.0.0-20241106050025-0f971ac33ed4 h1:ElkeiufJ5qqFbhxLH0TP7FhLOm37mXezIOk5iJgV27Q=
+github.com/gen2brain/iup-go/iup v0.0.0-20241106050025-0f971ac33ed4/go.mod h1:F026AOq3tZrMCqTMa3K32xLh7fyTdc9+KMTMUX6EtX0=
+github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
+github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
