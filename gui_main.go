@@ -437,8 +437,8 @@ func initDrawFunctions() {
 			tMin, tMax, tAvg, tUnit := TempDayInfo(data)
 			cv.SetAttribute("DRAWFONT", config.Font + ", 11")
 			time_day, _ := time.Parse("2006-01-02", data.Date)
-			myOutlineText(cv, fmt.Sprintf(" %v\n\n\n %v - %v", time_day.Format("Mon 02"), tMin, tMax), 
-				20 + (i*86), totalY+5, -1, -1, 1, "255 255 255", "25 25 25")
+			myOutlineText(cv, fmt.Sprintf("%v", time_day.Format("Mon 02")), 20 + (i*86), totalY+5, -1, -1, 1, "255 255 255", "25 25 25")
+			myOutlineText(cv, fmt.Sprintf("%v - %v", tMin, tMax), 20 + (i*86), totalY+56, -1, -1, 1, "255 255 255", "25 25 25")
 			
 			cv.SetAttribute("DRAWFONT", config.Font + ", 24")
 			myOutlineText(cv, fmt.Sprintf("%v%v", tAvg, tUnit), 
@@ -477,15 +477,19 @@ func initDrawFunctions() {
 		iup.DrawText(cv, "Rain: "+getPrecipitationByUnit(), 10, totalY + 25, -1, -1)
 		
 		windValue, windArrow := getWindByUnit()
-		iup.DrawText(cv, "Wind:     " + windValue, dlgW/2-10, totalY + 25, -1, -1)
-		
+		wind_pos := dlgW/2-10
+		iup.DrawText(cv, "Wind:", wind_pos, totalY + 25, -1, -1)
+		wind_w, _ := iup.DrawGetTextSize(cv, "Wind:")
 		
 		if windArrow != "" {
 			wind_int, ok := windTxtMap[weatherResult.CurrentCondition[0].WinddirArrow]
 			if ok {
-				iup.DrawImage(cv, fmt.Sprintf("wind_%v", wind_int), (dlgW/2)+32, totalY + 25, 20, 20)
+				iup.DrawImage(cv, fmt.Sprintf("wind_%v", wind_int), wind_pos + wind_w, totalY + 25, 20, 20)
+				wind_w += 23
 			}
 		}
+		
+		iup.DrawText(cv, windValue, wind_pos + wind_w, totalY + 25, -1, -1)
 		totalY += 60
 	}
 	
@@ -511,19 +515,15 @@ func initDrawFunctions() {
 			sunset_str = time24toAMPM(sunset_str)
 		}
 		
-		day_period := fmt.Sprintf("        %v          %v", sunrise_str, sunset_str)
-		myOutlineText(cv, day_period, 20, totalY, -1, -1, 1, "255 255 255", "25 25 25")
 		iup.DrawImage(cv, "sunrise_img", 18, totalY + 5, 28, 10)
 		iup.DrawImage(cv, "wind_4", 35, totalY, 20, 20)
-		iup.DrawImage(cv, "sunrise_img", 118, totalY + 5, 28, 10)
-		iup.DrawImage(cv, "wind_0", 135, totalY, 20, 20)
+		myOutlineText(cv, sunrise_str, 58, totalY, -1, -1, 1, "255 255 255", "25 25 25")
+		iup.DrawImage(cv, "sunrise_img", 140, totalY + 5, 28, 10)
+		iup.DrawImage(cv, "wind_0", 157, totalY, 20, 20)
+		myOutlineText(cv, sunset_str, 180, totalY, -1, -1, 1, "255 255 255", "25 25 25")
 		totalY += 30
 	}
 	
-}
-
-func setDrawFont(ih iup.Ihandle, font_name, font_type string, font_size int) {
-	ih.SetAttribute("DRAWFONT", fmt.Sprintf("%v, %v %v", font_name, font_type, font_size))
 }
 
 func myOutlineText(ih iup.Ihandle, txt string, x, y, w, h, outline int, color_in, color_out string) {
