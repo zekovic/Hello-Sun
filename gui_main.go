@@ -480,7 +480,7 @@ func initDrawFunctions() {
 	
 	drawMap["details"] = func() {
 		cv.SetAttributes(`DRAWCOLOR="90 90 90 150", DRAWSTYLE=FILL`)
-		DrawRoundedRect(cv, 5, totalY, dlgW - 5, totalY + 53, 6)
+		DrawRoundedRect(cv, 5, totalY, dlgW - 5, totalY + 70, 6)
 		cv.SetAttribute("DRAWCOLOR", "255 255 255")
 		cv.SetAttribute("DRAWFONT", config.Font + ", 12")
 		iup.DrawText(cv, "Pressure: "+getPressureByUnit(), 10, totalY+5, -1, -1)
@@ -501,7 +501,9 @@ func initDrawFunctions() {
 		}
 		
 		iup.DrawText(cv, windValue, wind_pos + wind_w, totalY + 25, -1, -1)
-		totalY += 60
+		
+		iup.DrawText(cv, "Humidity: " + weatherResult.CurrentCondition[0].Humidity, 10, totalY + 45, -1, -1)
+		totalY += 75
 	}
 	
 	drawMap["moon"] = func() {

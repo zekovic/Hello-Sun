@@ -18,6 +18,7 @@ type WeatherResult struct {
 		Cloudcover string				`json:"cloudcover"`
 		Humidity string					`json:"humidity"`
 		LocalObsDateTime string			`json:"localObsDateTime"`
+		CurrentTime string				`json:"currentTime"`
 		Observation_time string			`json:"observation_time"`
 		PrecipInches string				`json:"precipInches"`
 		PrecipMM string					`json:"precipMM"`
@@ -135,9 +136,8 @@ func (wr *WeatherResult) isNight() bool {
 	if len(wr.CurrentCondition) == 0 {
 		return false
 	}
-	tNow := time.Now()
-	tNow24H := tNow.Format("15:04")
-	if tNow24H < wr.CurrentCondition[0].Sunrise || wr.CurrentCondition[0].Sunset < tNow24H {
+	if wr.CurrentCondition[0].CurrentTime < wr.CurrentCondition[0].Sunrise ||
+		wr.CurrentCondition[0].Sunset < wr.CurrentCondition[0].CurrentTime {
 		return true
 	}
 	return false

@@ -102,7 +102,7 @@ func getInTextFormat() {
 	
 	// wttr.in/lib/parse_query.py   use_metric=true / use_imperial=true
 	// ?u - imperial   ?m - metric km/h   ?M - metric m/s
-	url := fmt.Sprintf("https://wttr.in/%v?m&format=%%x__%%t__%%f__%%w__%%m__%%M__%%S__%%s__%%P__%%u__%%p__%%h", 
+	url := fmt.Sprintf("https://wttr.in/%v?m&format=%%x__%%t__%%f__%%w__%%m__%%M__%%S__%%s__%%P__%%u__%%p__%%h__%%T", 
 		url.QueryEscape(config.Location.Weather))
 	data, err := getFromApi(url)
 	if err != nil {
@@ -113,7 +113,7 @@ func getInTextFormat() {
 	data_arr := strings.Split(data_str, "__")
 	fmt.Printf("Result: %v \n", data_arr)
 	
-	if len(weatherResult.CurrentCondition) == 0 || len(data_arr) < 11 {
+	if len(weatherResult.CurrentCondition) == 0 || len(data_arr) < 12 {
 		return
 	}
 	
@@ -148,12 +148,17 @@ func getInTextFormat() {
 	weatherResult.CurrentCondition[0].PressureMmHg = strconv.Itoa(int(pr_hPa_f * 0.750062))
 	weatherResult.CurrentCondition[0].PressurePsi = strconv.Itoa(int(pr_hPa_f * 0.0145038))
 	
-	pre_mm := strings.ReplaceAll(data_arr[9], "mm", "");
+	weatherResult.CurrentCondition[0].UvIndex = data_arr[9]
+	
+	pre_mm := strings.ReplaceAll(data_arr[10], "mm", "");
 	pre_mm_i, _ := strconv.Atoi(pre_mm)
 	weatherResult.CurrentCondition[0].PrecipMM = pre_mm
 	weatherResult.CurrentCondition[0].PrecipInches = strconv.Itoa(int(float64(pre_mm_i) * 0.03937))
 	
-	weatherResult.CurrentCondition[0].Humidity = data_arr[10]
+	weatherResult.CurrentCondition[0].Humidity = data_arr[11]
+	
+	weatherResult.CurrentCondition[0].CurrentTime = data_arr[12][0:5]
+	
 }
 
 func getTempByCelsius(temp_c string) [3]string {
