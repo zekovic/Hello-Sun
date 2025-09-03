@@ -253,7 +253,12 @@ func fillSettingsWindow() {
 	} else {
 		checkOnTop.SetAttribute("VALUE", "OFF")
 	}
-	checkBoot.SetAttribute("VALUE", config.StartOnBoot)
+	// checkBoot.SetAttribute("VALUE", config.StartOnBoot)
+	if (config.getRegistryBootValue()) {
+		checkBoot.SetAttribute("VALUE", "ON")
+	} else {
+		checkBoot.SetAttribute("VALUE", "OFF")
+	}
 	checkSystray.SetAttribute("VALUE", config.Systray)
 	labelFontVal.SetAttribute("TITLE", config.Font)
 	
@@ -288,7 +293,8 @@ func saveSettings() {
 	theTimer.SetAttribute("TIME", config.Refresh * 60 * 1000)
 	config.setOpacity(sliderOpacity.GetAttribute("VALUE"))
 	config.Systray = checkSystray.GetAttribute("VALUE")
-	config.StartOnBoot = checkBoot.GetAttribute("VALUE")
+	// config.StartOnBoot = checkBoot.GetAttribute("VALUE")
+	config.setRegistryBootValue(checkBoot.GetAttribute("VALUE") == "ON")
 	if checkOnTop.GetAttribute("VALUE") == "ON" {
 		config.AlwaysOnTop = "YES"
 	} else {

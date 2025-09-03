@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"golang.org/x/sys/windows/registry"
 )
 
 var configMap map [string]int
@@ -31,7 +33,7 @@ type MyConfig struct {
 	Refresh int				`json:"refresh"`
 	Opacity string			`json:"opacity"`
 	Systray string			`json:"systray"`
-	StartOnBoot string		`json:"start_on_boot"`
+	//StartOnBoot string		`json:"start_on_boot"`
 	AlwaysOnTop string		`json:"always_on_top"`
 	Font string				`json:"font"`
 	ShowParts []string		`json:"show_parts"`
@@ -79,7 +81,7 @@ func (c *MyConfig) init() {
 		Opacity: "230",
 		Refresh: 20,
 		Systray: "OFF",
-		StartOnBoot: "OFF",
+		//StartOnBoot: "OFF",
 		AlwaysOnTop: "YES",
 		Font: "Tahoma",
 		ShowParts: []string{
@@ -155,4 +157,52 @@ func (c *MyConfig) getOpacityPercentage() int {
 		return 100
 	}
 	return min(int(opacityVal / 2.55), 100)
+}
+
+func (c *MyConfig) getRegistryBootValue() bool {
+	
+	regKey, err := registry.OpenKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.QUERY_VALUE)
+	if err != nil {
+		fmt.Printf("Err (get - Reg path missing) %v", err)
+		return false
+	}
+	defer regKey.Close()
+	found_value, _, err := regKey.GetStringValue("HelloSun")
+	if err != nil {
+		fmt.Printf("Err (Start on boot is off) %v", err)
+		return false
+	}
+	fmt.Printf("Boot val: %v", found_value)
+	return true
+}
+
+func (c *MyConfig) setRegistryBootValue(bootStart bool) bool {
+	regKey, err := registry.OpenKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.SET_VALUE)
+	if err != nil {
+		fmt.Printf("Err (set - Reg path missing) %v", err)
+		return false
+	}
+	defer regKey.Close()
+	
+	if bootStart {
+		exe_path, err := os.Executable()
+		if err != nil {
+			fmt.Printf("Err while setting boot start (finding exe path)... %v", err)
+			return false
+		}
+		err = regKey.SetStringValue("HelloSun", fmt.Sprintf("\"%v\"", exe_path))
+		if err != nil {
+			fmt.Printf("Err while setting boot start to true... %v", err)
+		}
+		return true
+	} else {
+		err := regKey.DeleteValue("HelloSun")
+		if err != nil {
+			fmt.Printf("Err while setting boot start to false... %v", err)
+			return false
+		}
+		return true
+	}
+	
+	return true
 }

@@ -2,3 +2,5 @@ github.com/gen2brain/iup-go/iup v0.0.0-20241106050025-0f971ac33ed4 h1:ElkeiufJ5q
 github.com/gen2brain/iup-go/iup v0.0.0-20241106050025-0f971ac33ed4/go.mod h1:F026AOq3tZrMCqTMa3K32xLh7fyTdc9+KMTMUX6EtX0=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+golang.org/x/sys v0.35.0 h1:vz1N37gP5bs89s7He8XuIYXpyY0+QlsKmzipCbUtyxI=
+golang.org/x/sys v0.35.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
