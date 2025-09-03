@@ -7,8 +7,8 @@ import (
 	"strconv"
 )
 
-var urlAir string = "http://localhost:8070"
-//var urlAir string = "http://linki.co:8070"
+//var urlAir string = "http://localhost:8070"
+var urlAir string = "http://linki.co:8070"
 
 
 type BoundsResponse struct {
