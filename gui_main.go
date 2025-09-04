@@ -14,6 +14,7 @@ import (
 
 var dlg iup.Ihandle
 var cv iup.Ihandle
+var trayMenu iup.Ihandle
 var dlgW = 280
 var dlgH = 500
 var dlgOpacity = 255
@@ -97,6 +98,7 @@ func showGui() {
 	dlg.SetAttributes(`TITLE="Hello Sun",RXESIZE=NO, CUSTOMFRAMESIMULATE=YES, 
 		TRAY=YES, TRAYIMAGE=state_1, TRAYTIP="Hello Sun"`)
 	dlg.SetAttribute("TOPMOST", config.AlwaysOnTop)
+	dlg.SetAttribute("TASKBARBUTTON", "HIDE")
 	//dlg_opacity = config.getOpacity()
 	dlg.SetAttribute("OPACITY", config.Opacity)
 	fmt.Printf("OPACITY....... [%v]", config.Opacity)
@@ -120,6 +122,13 @@ func showGui() {
 	
 	createSettingsDialog()
 	
+	trayMenu = iup.Menu(
+		iup.Item("&Restore window").SetCallback("ACTION", iup.ActionFunc(restoreWindow)),
+		iup.Item("&Hide window").SetCallback("ACTION", iup.ActionFunc(hideWindow)),
+		iup.Item("&Settings").SetCallback("ACTION", iup.ActionFunc(openSettings)),
+		iup.Item("&Close").SetCallback("ACTION", iup.ActionFunc(closeApp)),
+	)
+	
 	initDrawFunctions()
 	
 	xDlg, yDlg := loadWindowPosition()
@@ -129,6 +138,31 @@ func showGui() {
 	theTimer.SetAttribute("RUN", "YES")
 	
 	iup.MainLoop()
+}
+
+func restoreWindow(ih iup.Ihandle) int {
+	if dlg.GetAttribute("IS_MINIMIZED") == "YES" {
+		dlg.SetAttribute("IS_MINIMIZED", "NO")
+		dlg.SetAttribute("PLACEMENT", "NORMAL")
+		iup.Show(dlg)
+	}
+	return iup.DEFAULT
+}
+func hideWindow(ih iup.Ihandle) int {
+	dlg.SetAttribute("PLACEMENT", "MINIMIZED")
+	dlg.SetAttribute("IS_MINIMIZED", "YES")
+	iup.Show(dlg)
+	return iup.MINIMIZE
+}
+func openSettings(ih iup.Ihandle) int {
+	settingsWindow(true)
+	return iup.DEFAULT
+}
+func closeApp(ih iup.Ihandle) int {
+	setConfigWindowPosition()
+	config.save()
+	iup.ExitLoop()
+	return iup.DEFAULT
 }
 
 func updateWindowShape(w, h int) {
@@ -298,30 +332,19 @@ func onClick(ih iup.Ihandle, button, pressed, x, y int, status string) int {
 		mouseDown = false
 	}
 	if y > dlgH - 30 && pressed == 1 && iup.IsButton1(status) {
-		/*if x > dlg_w - 100 && x < dlg_w - 20 {
-			settingsWindow(true)
-		}
-		if x > dlg_w - 20 {
-			setConfigWindowPosition()
-			config.save()
-			iup.ExitLoop()
-		}*/
 		
-		if x >= 205 /*&& x < 265*/ {
-			setConfigWindowPosition()
-			config.save()
-			iup.ExitLoop()
+		if x < 111 {
+			openSettings(ih)
 		}
 		if x >= 111 && x < 205 {
-			fmt.Printf("Minimize...")
-			dlg.SetAttribute("PLACEMENT", "MINIMIZED")
-			dlg.SetAttribute("IS_MINIMIZED", "YES")
-			iup.Show(dlg)
-			//iup.Hide(dlg)
-			return iup.MINIMIZE
+			hideWindow(ih)
 		}
-		if x < 111 {
-			settingsWindow(true)
+		if x >= 205 /*&& x < 265*/ {
+			if config.Systray == "ON" {
+				hideWindow(ih)
+			} else {
+				closeApp(ih)
+			}
 		}
 		
 	}
@@ -329,11 +352,12 @@ func onClick(ih iup.Ihandle, button, pressed, x, y int, status string) int {
 }
 
 func onMainDialogTrayClick(ih iup.Ihandle, button, pressed, dblclick int) int {
-	fmt.Printf("RESTORE..... [%v]", dlg.GetAttribute("IS_MINIMIZED"))
-	if dlg.GetAttribute("IS_MINIMIZED") == "YES" {
-		dlg.SetAttribute("IS_MINIMIZED", "NO")
-		dlg.SetAttribute("PLACEMENT", "NORMAL")
-		iup.Show(dlg)
+	fmt.Printf("BTN: [%v] RESTORE..... [%v] \n", button, dlg.GetAttribute("IS_MINIMIZED"))
+	if button == 3 {
+		xScr, yScr := getMousePosition()
+		iup.Popup(trayMenu, xScr - 10, yScr - 15)
+	} else {
+		restoreWindow(ih)
 	}
 	return iup.DEFAULT
 }

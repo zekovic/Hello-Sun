@@ -20,6 +20,17 @@ func getScreenSize() (int, int) {
 	return w, h
 }
 
+func getMousePosition() (int, int) {
+	x_y_arr := strings.Split(iup.GetGlobal("CURSORPOS"), "x")
+	x := 0
+	y := 0
+	if len(x_y_arr) > 1 {
+		x, _ = strconv.Atoi(x_y_arr[0])
+		y, _ = strconv.Atoi(x_y_arr[1])
+	}
+	return x, y
+}
+
 func getWindowXY(ih iup.Ihandle) (int, int) {
 	x_y_arr := strings.Split(ih.GetAttribute("SCREENPOSITION"), ",")
 	x := 0
