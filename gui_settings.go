@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gen2brain/iup-go/iup"
 )
@@ -458,10 +459,12 @@ func settingsAirQualityInfo(lat, lon string) {
 	labelLocationAir.SetAttribute("ACTIVE", "NO")
 	btnLocationAir.SetAttribute("ACTIVE", "NO")
 	listLocations.SetAttribute("ACTIVE", "NO")
+	btnRefreshLocations.SetAttribute("ACTIVE", "NO")
 	
 	defer labelLocationAir.SetAttribute("ACTIVE", "YES")
 	defer btnLocationAir.SetAttribute("ACTIVE", "YES")
 	defer listLocations.SetAttribute("ACTIVE", "YES")
+	defer btnRefreshLocations.SetAttribute("ACTIVE", "YES")
 	
 	aqiResultTmp.City.Lat = latVal
 	aqiResultTmp.City.Lon = lonVal
@@ -487,6 +490,10 @@ func settingsAirQualityInfo(lat, lon string) {
 	foundID := 0
 	fmt.Printf("locations.Data : [%v]\n", len(locations.Data))
 	for i, item := range locations.Data {
+		// fix IUP crash on list fill too fast
+		if i > 15 {
+			time.Sleep(50 * time.Millisecond)
+		}
 		if aqiResultTmp.City.Idx == item.UID {
 			foundID = i + 1
 		}
