@@ -522,6 +522,10 @@ func onClickRefreshLocations(ih iup.Ihandle) int {
 			lon = found.Lon
 		}
 	}
+	if lat == "" || lon == "" {
+		lat = config.Location.Lat
+		lon = config.Location.Lon
+	}
 	go settingsAirQualityInfo(lat, lon)
 	return iup.DEFAULT
 }
