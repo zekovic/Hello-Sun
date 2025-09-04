@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gen2brain/iup-go/iup"
 )
@@ -458,12 +457,12 @@ func settingsAirQualityInfo(lat, lon string) {
 	
 	labelLocationAir.SetAttribute("ACTIVE", "NO")
 	btnLocationAir.SetAttribute("ACTIVE", "NO")
-	listLocations.SetAttribute("ACTIVE", "NO")
+	listLocations.SetAttribute("VISIBLE", "NO") // fix IUP crash on list fill too fast
 	btnRefreshLocations.SetAttribute("ACTIVE", "NO")
 	
 	defer labelLocationAir.SetAttribute("ACTIVE", "YES")
 	defer btnLocationAir.SetAttribute("ACTIVE", "YES")
-	defer listLocations.SetAttribute("ACTIVE", "YES")
+	defer listLocations.SetAttribute("VISIBLE", "YES")
 	defer btnRefreshLocations.SetAttribute("ACTIVE", "YES")
 	
 	aqiResultTmp.City.Lat = latVal
@@ -490,16 +489,11 @@ func settingsAirQualityInfo(lat, lon string) {
 	foundID := 0
 	fmt.Printf("locations.Data : [%v]\n", len(locations.Data))
 	for i, item := range locations.Data {
-		// fix IUP crash on list fill too fast
-		if i > 15 {
-			time.Sleep(50 * time.Millisecond)
-		}
 		if aqiResultTmp.City.Idx == item.UID {
 			foundID = i + 1
 		}
-		fmt.Printf("LIST i : [%v][%v][%v]\n", i, item.Station.Name, item.UID)
+		//fmt.Printf("LIST i : [%v][%v][%v]\n", i, item.Station.Name, item.UID)
 		listLocations.SetAttribute(fmt.Sprintf("%v", i+1), fmt.Sprintf("%v [%v]", item.Station.Name, item.UID))
-		fmt.Printf("[%v] ITEM.STATION: [%v] \n", item.UID, item.Station.Name)
 		listLocations.SetAttribute(fmt.Sprintf("x%v", i+1), fmt.Sprintf("%v", item.UID))
 		listLocations.SetAttribute(fmt.Sprintf("lat_%v", i+1), fmt.Sprintf("%v", item.Lat))
 		listLocations.SetAttribute(fmt.Sprintf("lon_%v", i+1), fmt.Sprintf("%v", item.Lon))
