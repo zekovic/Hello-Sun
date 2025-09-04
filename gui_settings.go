@@ -457,12 +457,10 @@ func settingsAirQualityInfo(lat, lon string) {
 	
 	labelLocationAir.SetAttribute("ACTIVE", "NO")
 	btnLocationAir.SetAttribute("ACTIVE", "NO")
-	listLocations.SetAttribute("VISIBLE", "NO") // fix IUP crash on list fill too fast
 	btnRefreshLocations.SetAttribute("ACTIVE", "NO")
 	
 	defer labelLocationAir.SetAttribute("ACTIVE", "YES")
 	defer btnLocationAir.SetAttribute("ACTIVE", "YES")
-	defer listLocations.SetAttribute("VISIBLE", "YES")
 	defer btnRefreshLocations.SetAttribute("ACTIVE", "YES")
 	
 	aqiResultTmp.City.Lat = latVal
@@ -488,6 +486,10 @@ func settingsAirQualityInfo(lat, lon string) {
 	listLocations.SetAttribute("1", nil) // clear the list
 	foundID := 0
 	fmt.Printf("locations.Data : [%v]\n", len(locations.Data))
+	
+	listLocations.SetAttribute("VISIBLE", "NO") // fix IUP crash on list fill too fast
+	defer listLocations.SetAttribute("VISIBLE", "YES")
+	
 	for i, item := range locations.Data {
 		if aqiResultTmp.City.Idx == item.UID {
 			foundID = i + 1
