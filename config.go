@@ -85,7 +85,7 @@ func (c *MyConfig) init() {
 		AlwaysOnTop: "YES",
 		Font: "Tahoma",
 		ShowParts: []string{
-			"daily", "hourly", "air", "details", "moon", "sunrise",
+			"daily", /*"hourly",*/ "air", "details", "moon", "sunrise",
 		},
 	}
 	c.Location.Weather = ""

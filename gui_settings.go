@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"strconv"
 	"strings"
@@ -35,9 +36,14 @@ var labelFontVal iup.Ihandle
 var btnFont iup.Ihandle
 var dlgFont iup.Ihandle
 var checkPartsWrap iup.Ihandle
+var txtAbout iup.Ihandle
+var linkAbout iup.Ihandle
 
 var weatherTmp WeatherResult
 var aqiResultTmp AirResult
+
+//go:embed LICENSE
+var licenseText string
 
 func createSettingsDialog() {
 	
@@ -74,8 +80,8 @@ func createSettingsDialog() {
 	checkPartsWrap = iup.Vbox(
 		iup.Hbox(newUpBtn(), newDownBtn(), iup.Label("  "), 
 			iup.Toggle("Daily Forecast").SetHandle("daily"), ).SetAttributes(hAttrs),
-		iup.Hbox(newUpBtn(), newDownBtn(), iup.Label("  "), 
-			iup.Toggle("Hourly Forecast").SetHandle("hourly"), ).SetAttributes(hAttrs),
+		// iup.Hbox(newUpBtn(), newDownBtn(), iup.Label("  "), 
+		// 	iup.Toggle("Hourly Forecast").SetHandle("hourly"), ).SetAttributes(hAttrs),
 		iup.Hbox(newUpBtn(), newDownBtn(), iup.Label("  "), 
 			iup.Toggle("Moon Phase").SetHandle("moon"), ).SetAttributes(hAttrs),
 		iup.Hbox(newUpBtn(), newDownBtn(), iup.Label("  "), 
@@ -99,6 +105,14 @@ func createSettingsDialog() {
 	listLocations.SetAttributes(`USERSIZE="350x210"`)
 	listLocations.SetCallback("VALUECHANGED_CB", iup.ValueChangedFunc(onListLocationsChanged))
 	btnRefreshLocations.SetAttributes(``)
+	
+	txtAbout = iup.Text().SetAttributes(`MULTILINE=YES, WORDWRAP=YES, READONLY=YES, EXPAND=YES`)
+	replaced := strings.ReplaceAll(licenseText, "\n\n", "_____")
+	replaced = strings.ReplaceAll(replaced, "\n", " ")
+	replaced = strings.ReplaceAll(replaced, "_____", "\n\n")
+	txtAbout.SetAttribute("VALUE", replaced)
+	
+	// linkAbout = iup.Link("https://github.com/zekovic", "github.com/zekovic").SetAttribute("URL", "https://github.com/zekovic")
 	
 	wndSettings = iup.Dialog(
 		iup.Vbox(
@@ -148,8 +162,28 @@ func createSettingsDialog() {
 				).SetAttributes(`MARGIN="5x5", TABTITLE="Display"`),
 				checkPartsWrap.SetAttributes(`MARGIN="5x5", TABTITLE="Parts"`),
 				iup.Vbox(
-					iup.Hbox(iup.Label("About this..."), ),
-					iup.Fill(),
+					iup.Hbox(
+						iup.Label("Hello Sun"),
+						iup.Fill(),
+						iup.Link("", "github.com/zekovic").SetAttribute("URL", "https://github.com/zekovic"),
+					),
+					iup.Hbox(
+						iup.Label("Made with Golang IUP bindings: "),
+						iup.Fill(),
+						iup.Link("", "github.com/gen2brain/iup-go").SetAttribute("URL", "https://github.com/gen2brain/iup-go"),
+					),
+					iup.Hbox(
+						iup.Label("World Air Quality Index "),
+						iup.Fill(),
+						iup.Link("", "https://waqi.info").SetAttribute("URL", "https://waqi.info"),
+					),
+					iup.Hbox(
+						iup.Label("wttr.in "),
+						iup.Fill(),
+						iup.Link("", "github.com/chubin/wttr.in").SetAttribute("URL", "https://github.com/chubin/wttr.in"),
+					),
+					txtAbout,
+					//iup.Fill(),
 				).SetAttributes(`MARGIN="5x5", TABTITLE="About"`),
 				//iup.Fill(),
 			),
