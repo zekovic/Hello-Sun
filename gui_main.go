@@ -1,11 +1,11 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"image"
 	"image/jpeg"
 	"image/png"
-	"os"
 	"time"
 	"unicode/utf8"
 
@@ -25,12 +25,15 @@ var mouseY int
 
 var theTimer iup.Ihandle
 
+//go:embed res/*
+var res_folder embed.FS
+
 func showGui() {
 	iup.SetGlobal("UTF8MODE", "YES")
 	iup.Open()
 	defer iup.Close()
 	
-	file, err := os.Open("res/img_sun.jpg")
+	file, err := res_folder.Open("res/img_sun.jpg")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -46,7 +49,7 @@ func showGui() {
 	iup.ImageFromImage(mySubImage).SetHandle("myimage")
 	
 	
-	file, err = os.Open("res/menu.png")
+	file, err = res_folder.Open("res/menu.png")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -61,7 +64,7 @@ func showGui() {
 	
 	
 	
-	file, err = os.Open("res/waqi.info_aqicn.org_logo.png")
+	file, err = res_folder.Open("res/waqi.info_aqicn.org_logo.png")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -71,7 +74,7 @@ func showGui() {
 	}
 	iup.ImageFromImage(aqicnLogo).SetHandle("aqicn_logo")
 	
-	file, err = os.Open("res/wttr.in_logo.jpg")
+	file, err = res_folder.Open("res/wttr.in_logo.jpg")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -152,7 +155,7 @@ func loadSubImage(img image.Image, x, y, w, h int, nameId string) {
 }
 
 func loadSubImageArrays() {
-	file, err := os.Open("res/weather_icons.png")
+	file, err := res_folder.Open("res/weather_icons.png")
 	defer file.Close()
 	if err != nil {
 		fmt.Println(err)
