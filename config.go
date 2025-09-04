@@ -97,7 +97,7 @@ func (c *MyConfig) init() {
 
 func (c *MyConfig) read() {
 	//time.Sleep(1 * time.Second)
-	data, err := os.ReadFile("config.json")
+	data, err := os.ReadFile("hello_sun_config.json")
 	if err != nil {
 		//saveConfig()
 		c.save()
@@ -137,7 +137,7 @@ func (c *MyConfig) save() {
 	if err != nil {
 		fmt.Println("Error while making config json. ", err)
 	}
-	err = os.WriteFile("config.json", data, 0666)
+	err = os.WriteFile("hello_sun_config.json", data, 0666)
 	if err != nil {
 		fmt.Println("Error while writing to config. ", err)
 	}
