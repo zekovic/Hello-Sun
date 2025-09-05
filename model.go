@@ -1,5 +1,9 @@
 package main
 
+import (
+	"math/rand/v2"
+)
+
 
 var statesMap map [int]int
 var statesTxtMap map [string]int
@@ -18,6 +22,7 @@ var moonArr [8]ImageData
 var moonTxtMap map [string]int
 var windArr [8]ImageData
 var windTxtMap map [string]int
+var imagesArr [200]string
 
 func initImagesInfo() {
 	statesMap = make(map[int]int)
@@ -26,24 +31,24 @@ func initImagesInfo() {
 	moonTxtMap = make(map[string]int)
 	
 	statesArr[0] =  ImageData{ "Unknown",				"img_sun.jpg", 180,	178,70,	70 }
-	statesArr[1] =  ImageData{ "Sunny",				"img_sun.jpg", 1,	1,	70,	70 }
-	statesArr[2] =  ImageData{ "Partly Cloudy",		"img_sun.jpg", 91,	1,	70,	70 }
+	statesArr[1] =  ImageData{ "Sunny",					"img_sun.jpg", 1,	1,	70,	70 }
+	statesArr[2] =  ImageData{ "Partly Cloudy",			"img_sun.jpg", 91,	1,	70,	70 }
 	statesArr[3] =  ImageData{ "Cloudy",				"img_sun.jpg", 180,	1,	70,	70 }
 	statesArr[4] =  ImageData{ "Very Cloudy",			"img_sun.jpg", 180,	1,	70,	70 }
 	statesArr[5] =  ImageData{ "Fog",					"img_sun.jpg", 270,	1,	70,	70 }
-	statesArr[6] =  ImageData{ "Light Showers",		"img_sun.jpg", 2,	89,	70,	70 }
+	statesArr[6] =  ImageData{ "Light Showers",			"img_sun.jpg", 2,	89,	70,	70 }
 	statesArr[7] =  ImageData{ "Light Sleet Showers",	"img_sun.jpg", 90,	90,	70,	70 }
 	statesArr[8] =  ImageData{ "Light Sleet",			"img_sun.jpg", 90,	90,	70,	70 }
-	statesArr[9] =  ImageData{ "Thundery Showers",	"img_sun.jpg", 269,	90,	70,	70 }
+	statesArr[9] =  ImageData{ "Thundery Showers",		"img_sun.jpg", 269,	90,	70,	70 }
 	statesArr[10] = ImageData{ "Light Snow",			"img_sun.jpg", 3,	177,70,	70 }
 	statesArr[11] = ImageData{ "Heavy Snow",			"img_sun.jpg", 92,	176,70,	70 }
 	statesArr[12] = ImageData{ "Light Rain",			"img_sun.jpg", 2,	89,	70,	70 }
-	statesArr[13] = ImageData{ "Heavy Showers",		"img_sun.jpg", 90,	90,	70,	70 }
+	statesArr[13] = ImageData{ "Heavy Showers",			"img_sun.jpg", 90,	90,	70,	70 }
 	statesArr[14] = ImageData{ "Heavy Rain",			"img_sun.jpg", 90,	90,	70,	70 }
 	statesArr[15] = ImageData{ "Light Snow Showers",	"img_sun.jpg", 3,	177,70,	70 }
 	statesArr[16] = ImageData{ "Heavy Snow Showers",	"img_sun.jpg", 92,	176,70,	70 }
 	statesArr[17] = ImageData{ "Thundery Heavy Rain",	"img_sun.jpg", 180,	89,	70,	70 }
-	statesArr[18] = ImageData{ "Thundery Snow Showers","img_sun.jpg",269,	90,	70,	70 }
+	statesArr[18] = ImageData{ "Thundery Snow Showers",	"img_sun.jpg", 269,	90,	70,	70 }
 	
 	statesTxtMap["?"]		= 0		//  ✨
 	statesTxtMap["mm"]		= 3		//  ☁️
@@ -151,8 +156,103 @@ func initImagesInfo() {
 	windTxtMap["→"] = 6
 	windTxtMap["↘"] = 7
 	
+	imagesArr[0] = "1_1_img_sun.jpg"
+	// Sunny
+	imagesArr[10] = "1_1_field-3629120_1920.jpg"
+	imagesArr[11] = "1_1_img_sun.jpg"
+	imagesArr[12] = "1_1_rapeseeds-474558_1280.jpg"
+	imagesArr[13] = "1_1_trees-5033072_1280.jpg"
+	imagesArr[14] = "1_2_sunset-789974_1280.jpg"
+	// Partly Cloudy
+	imagesArr[20] = "2_0_sunrise-1513802_1280.jpg"
+	imagesArr[21] = "2_1_chris-von-krebs-cintorino-1RAiGhaaR1c-unsplash.jpg"
+	imagesArr[22] = "2_1_clouds-2085112_1280.jpg"
+	imagesArr[23] = "2_1_darling-7655568_1280.jpg"
+	imagesArr[24] = "2_1_heaven-3395811_1280.jpg"
+	imagesArr[25] = "2_1_sky-7456744_1280.jpg"
+	imagesArr[26] = "2_2_purple-669046_1280.jpg"
+	imagesArr[27] = "2_2_sunset-1661088_1280.jpg"
+	// Cloudy
+	imagesArr[30] = "3_1_sky-414199_1280.jpg"
+	// Very Cloudy
+	imagesArr[40] = "4_1_clouds-8029036_1280.jpg"
+	imagesArr[41] = "4_1_sea-6811812_1280.jpg"
+	// Fog
+	imagesArr[50] = "5_1_clouds-4979558_1280.jpg"
+	imagesArr[51] = "5_1_fog-4436636_1280.jpg"
+	// Light Showers
+	imagesArr[60] = "6_1_glass-window-1845534_1280.jpg"
+	imagesArr[61] = "6_1_rain-122691_1280.jpg"
+	// Light Sleet Showers
+	imagesArr[70] = "8_1_ice-crystals-6939641_1280.jpg"
+	imagesArr[71] = "8_1_winter-3183033_1280.jpg"
+	// Light Sleet
+	imagesArr[80] = "8_1_ice-crystals-6939641_1280.jpg"
+	imagesArr[81] = "8_1_winter-3183033_1280.jpg"
+	// Thundery Showers
+	imagesArr[90] = "9_1_lightning-2702168_1280.jpg"
+	imagesArr[91] = "9_1_lightning-4304449_1280.jpg"
+	// Light Snow
+	imagesArr[100] = "10_1_snow-1768544_1280.jpg"
+	imagesArr[101] = "10_1_winter-7661769_1280.jpg"
+	// Heavy Snow
+	imagesArr[110] = "10_1_snow-1768544_1280.jpg"
+	imagesArr[111] = "10_1_winter-7661769_1280.jpg"
+	// Light Rain
+	imagesArr[120] = "6_1_glass-window-1845534_1280.jpg"
+	imagesArr[121] = "6_1_rain-122691_1280.jpg"
+	// Heavy Showers
+	imagesArr[130] = "6_1_glass-window-1845534_1280.jpg"
+	imagesArr[131] = "6_1_rain-122691_1280.jpg"
+	// Heavy Rain
+	imagesArr[140] = "6_1_glass-window-1845534_1280.jpg"
+	imagesArr[141] = "6_1_rain-122691_1280.jpg"
+	// Light Snow Showers
+	imagesArr[150] = "10_1_snow-1768544_1280.jpg"
+	imagesArr[151] = "10_1_winter-7661769_1280.jpg"
+	// Heavy Snow Showers
+	imagesArr[160] = "10_1_snow-1768544_1280.jpg"
+	imagesArr[161] = "10_1_winter-7661769_1280.jpg"
+	// Thundery Heavy Rain
+	imagesArr[170] = "9_1_lightning-2702168_1280.jpg"
+	imagesArr[171] = "9_1_lightning-4304449_1280.jpg"
+	// Thundery Snow Showers
+	imagesArr[180] = "10_1_snow-1768544_1280.jpg"
+	imagesArr[181] = "10_1_winter-7661769_1280.jpg"
+
 }
 
+
+
+func getImageOfWeather(state int) string {
+	randomCount := 1
+	if state == 1 { randomCount = 5 }
+	if state == 2 { randomCount = 8 }
+	if state == 3 { randomCount = 1 }
+	if state == 4 { randomCount = 2 }
+	if state == 5 { randomCount = 2 }
+	if state == 6 { randomCount = 2 }
+	if state == 7 { randomCount = 2 }
+	if state == 8 { randomCount = 2 }
+	if state == 9 { randomCount = 2 }
+	if state == 10 { randomCount = 2 }
+	if state == 11 { randomCount = 2 }
+	if state == 12 { randomCount = 2 }
+	if state == 13 { randomCount = 2 }
+	if state == 14 { randomCount = 2 }
+	if state == 15 { randomCount = 2 }
+	if state == 16 { randomCount = 2 }
+	if state == 17 { randomCount = 2 }
+	if state == 18 { randomCount = 2 }
+	
+	randomItem := rand.IntN(randomCount) + (state * 10)
+	imageName := imagesArr[randomItem]
+	if imageName == "" {
+		imageName = imagesArr[0]
+	}
+	//fmt.Printf("RANDOM: %v, %v, %v", randomCount, randomItem, imageName)
+	return imageName
+}
 
 
 type Place struct {

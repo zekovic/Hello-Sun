@@ -23,6 +23,7 @@ var mouseHere bool
 var mouseDown bool = false
 var mouseX int
 var mouseY int
+var currentStateInt = -1
 
 var theTimer iup.Ihandle
 
@@ -34,23 +35,9 @@ func showGui() {
 	iup.Open()
 	defer iup.Close()
 	
-	file, err := res_folder.Open("res/img_sun.jpg")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	jpgImage, err := jpeg.Decode(file)
-	if err != nil {
-		fmt.Println(err)
-	}
+	getBackgroundImage("1_1_img_sun.jpg")
 	
-	mySubImage := jpgImage.(interface {
-		SubImage(r image.Rectangle) image.Image
-	}).SubImage(image.Rect(180, 20, 180 + dlgW, 20 + dlgH))
-	iup.ImageFromImage(mySubImage).SetHandle("myimage")
-	
-	
-	file, err = res_folder.Open("res/menu.png")
+	file, err := res_folder.Open("res/menu.png")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -365,6 +352,25 @@ func onMainDialogTrayClick(ih iup.Ihandle, button, pressed, dblclick int) int {
 var totalY int
 var totalYOld int
 
+
+func getBackgroundImage(fileName string) {
+	file, err := res_folder.Open(fmt.Sprintf("res/%v", fileName))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	jpgImage, err := jpeg.Decode(file)
+	if err != nil {
+		fmt.Println(err)
+	}
+	
+	mySubImage := jpgImage.(interface {
+		SubImage(r image.Rectangle) image.Image
+	// }).SubImage(image.Rect(180, 20, 180 + dlgW, 20 + dlgH))
+	}).SubImage(image.Rect(1, 1, 1 + dlgW, 1 + dlgH))
+	iup.ImageFromImage(mySubImage).SetHandle("background_image")
+}
+
 func actionCb(ih iup.Ihandle, posx, posy float64) int {
 	iup.DrawBegin(ih)
 	
@@ -375,7 +381,13 @@ func actionCb(ih iup.Ihandle, posx, posy float64) int {
 	
 	if len(weatherResult.CurrentCondition) > 0 {
 		
-		iup.DrawImage(ih, "myimage", 0, 0, w, h)
+		stateInt := statesTxtMap[weatherResult.CurrentCondition[0].WeatherCodeTxt]
+		if stateInt != currentStateInt {
+			currentStateInt = stateInt
+			getBackgroundImage(getImageOfWeather(stateInt))
+		}
+		
+		iup.DrawImage(ih, "background_image", 0, 0, w, h)
 		// weather_info := weather_result.CurrentCondition[0]
 		
 		totalY += 25
