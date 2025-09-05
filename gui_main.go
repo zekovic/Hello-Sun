@@ -6,6 +6,7 @@ import (
 	"image"
 	"image/jpeg"
 	"image/png"
+	"math/rand/v2"
 	"time"
 	"unicode/utf8"
 
@@ -35,7 +36,8 @@ func showGui() {
 	iup.Open()
 	defer iup.Close()
 	
-	getBackgroundImage("1_1_img_sun.jpg")
+	// getBackgroundImage(getImageOfWeather(1))
+	getBackgroundImage(imagesArr[0])
 	
 	file, err := res_folder.Open("res/menu.png")
 	if err != nil {
@@ -363,11 +365,18 @@ func getBackgroundImage(fileName string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	jpgH := jpgImage.Bounds().Max.Y
+	jpgW := jpgImage.Bounds().Max.X
+	imageX := rand.IntN(jpgW - dlgW)
+	imageY := rand.IntN(jpgH - dlgH)
+	if imageX < 0 { imageX = 0 }
+	if imageY < 0 { imageY = 0 }
+	// fmt.Printf("\nJPG %v: [%v * %v] DLG: [%v * %v] ", fileName, jpgW, jpgH, dlgW, dlgH)
+	// fmt.Printf("XY: [%v, %v] MAX: [%v, %v] \n", imageX, imageY, jpgW - dlgW, jpgH - dlgH)
 	
 	mySubImage := jpgImage.(interface {
 		SubImage(r image.Rectangle) image.Image
-	// }).SubImage(image.Rect(180, 20, 180 + dlgW, 20 + dlgH))
-	}).SubImage(image.Rect(1, 1, 1 + dlgW, 1 + dlgH))
+	}).SubImage(image.Rect(imageX, imageY, imageX + dlgW, imageY + dlgH))
 	iup.ImageFromImage(mySubImage).SetHandle("background_image")
 }
 
